@@ -6,8 +6,10 @@ import Dashboard from './Dashboard';
 
 describe ('the Dashboard component', () => {
 
-  test ('renders', () => {
-    render (<Dashboard/>);
+  test ('renders without crashing', () => {
+    const { unmount } = render (<Dashboard/>);
+
+    unmount ();
   });
 
   test ('shows the display', () => {
