@@ -4,15 +4,15 @@ import '@testing-library/jest-dom/extend-expect';
 
 import Dashboard from './Dashboard';
 
-describe ('the Dashboard component', () => {
+describe (`the Dashboard component`, () => {
 
-  test ('renders without crashing', () => {
+  test (`renders without crashing`, () => {
     const { unmount } = render (<Dashboard/>);
 
     unmount ();
   });
 
-  test ('shows the display', () => {
+  test (`shows the display`, () => {
     const { getByTestId } = render (<Dashboard/>);
     const Display = getByTestId ('display-panel');
 
@@ -20,7 +20,7 @@ describe ('the Dashboard component', () => {
     expect (Display).toHaveClass ('display panel');
   });
 
-  test ('shows the controls', () => {
+  test (`shows the controls`, () => {
     const { getByTestId } = render (<Dashboard/>);
     const Controls = getByTestId ('controls-panel');
 
