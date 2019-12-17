@@ -30,8 +30,32 @@ describe (`the Controls component`, () => {
 
   test.todo (`the \`locked\` toggler text changes to reflect action`);
 
-  test.todo (`the \`closed\` toggler is disabled when \`locked\``);
+  test (`the \`closed\` toggler is ENABLED when not \`locked\``, () => {
+    const { getByTestId } = render (<Controls locked={false}/>);
+    const ToggleClosed = getByTestId ('toggle-closed');
 
-  test.todo (`the \`locked\` toggler is disabled when not \`closed\``);
+    expect (ToggleClosed).toBeEnabled ();
+  });
+
+  test (`the \`closed\` toggler is DISABLED when \`locked\``, () => {
+    const { getByTestId } = render (<Controls locked={true}/>);
+    const ToggleClosed = getByTestId ('toggle-closed');
+
+    expect (ToggleClosed).toBeDisabled ();
+  });
+
+  test (`the \`locked\` toggler is ENABLED when \`closed\``, () => {
+    const { getByTestId } = render (<Controls closed={true}/>);
+    const ToggleLocked = getByTestId ('toggle-locked');
+
+    expect (ToggleLocked).toBeEnabled ();
+  });
+
+  test (`the \`locked\` toggler is DISABLED when not \`closed\``, () => {
+    const { getByTestId } = render (<Controls closed={false}/>);
+    const ToggleLocked = getByTestId ('toggle-locked');
+
+    expect (ToggleLocked).toBeDisabled ();
+  });
 
 });
