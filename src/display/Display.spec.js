@@ -6,7 +6,7 @@ import Display from './Display';
 
 describe (`the Display component`, () => {
 
-  test (`renders without crashing`, () => {
+  test (`renders and unmounts without crashing`, () => {
     const { unmount } = render (<Display/>);
 
     unmount ();
@@ -26,24 +26,30 @@ describe (`the Display component`, () => {
     expect (IsLocked).toBeInTheDocument ();
   });
 
-  test (`displays 'Closed' when \`closed\`, else 'Open'`, () => {
-    const { getByTestId, rerender } = render (<Display closed={true}/>);
+  test (`displays 'Closed' when \`closed\``, () => {
+    const { getByTestId } = render (<Display closed={true}/>);
     const IsClosed = getByTestId ('is-closed');
 
     expect (IsClosed).toHaveTextContent ('Closed');
+  });
 
-    rerender (<Display closed={false}/>);
+  test (`displays 'Open' when not \`closed\``, () => {
+    const { getByTestId } = render (<Display closed={false}/>);
+    const IsClosed = getByTestId ('is-closed');
 
     expect (IsClosed).toHaveTextContent ('Open');
   });
 
   test (`displays 'Locked' when \`locked\`, else 'Unlocked'`, () => {
-    const { getByTestId, rerender } = render (<Display locked={true}/>);
+    const { getByTestId } = render (<Display locked={true}/>);
     const IsLocked = getByTestId ('is-locked');
 
     expect (IsLocked).toHaveTextContent ('Locked');
+  });
 
-    rerender (<Display locked={false}/>);
+  test (`displays 'Unlocked' when not \`locked\``, () => {
+    const { getByTestId } = render (<Display locked={false}/>);
+    const IsLocked = getByTestId ('is-locked');
 
     expect (IsLocked).toHaveTextContent ('Unlocked');
   });
