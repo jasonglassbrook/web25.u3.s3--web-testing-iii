@@ -6,7 +6,7 @@ import Dashboard from './Dashboard';
 
 describe (`the Dashboard component`, () => {
 
-  test (`renders without crashing`, () => {
+  test (`renders and unmounts without crashing`, () => {
     const { unmount } = render (<Dashboard/>);
 
     unmount ();
