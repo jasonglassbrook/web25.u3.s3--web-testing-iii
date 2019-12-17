@@ -1,9 +1,76 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
+import Stateful from '../mocks/Stateful';
+
+// import Dashboard from '../dashboard/Dashboard';
 import Controls from './Controls';
 
+/***************************************
+  mocks
+***************************************/
+
+const mock = {};
+
+mock.state = {
+  closable : {
+    closed : false,
+    locked : false,
+  },
+  lockable : {
+    closed : true,
+    locked : false,
+  },
+};
+
+mock.context = Stateful;
+
+/// array-like ///
+const first = (a) => (a[0]);
+const last = (a) => (a[a.length - 1]);
+const most = (a) => (a.slice (0, a.length - 1));
+const rest = (a) => (a.slice (1));
+
+/// strings ///
+const toFirstUpperCase = (s) => (
+  first (s).toUpperCase () + rest (s)
+);
+const toPastTense = (s) => (
+  s + (last (s) === 'e' ? '' : 'e') + 'd'
+);
+const toAble = (s) => (
+  (last (s) === 'e' ? most (s) : s) + 'able'
+);
+
+mock.toggler = (Container, verb) => {
+  /// setup : test ///
+  const verbAble = toAble (verb);
+  const verbPast = toPastTense (verb);
+
+  /// setup : state ///
+  const context = new mock.context (mock.state[verbAble]);
+  const props = () => ({
+    ...context.getState (),
+    [`toggle${toFirstUpperCase (verbPast)}`] : () => context.toggleState (verbPast),
+  })
+  const getContainer = () => (<Container {...(props ())}/>);
+
+  /// setup : components ///
+  const funs = render (getContainer ());
+  const getToggler = () => funs.getByTestId (`toggle-${verbPast}`);
+
+  ///
+  return {
+    context,
+    container : { get : getContainer, props, ...funs },
+    toggler : { get: getToggler },
+  };
+}
+
+/***************************************
+  MAIN
+***************************************/
 describe (`the Controls component`, () => {
 
   test (`renders and unmounts without crashing`, () => {
@@ -27,52 +94,42 @@ describe (`the Controls component`, () => {
   });
 
   test (`the \`closed\` toggler's text changes to reflect action`, () => {
-    const { getByTestId } = render (<Controls closed={false} locked={false}/>);
-    const ToggleClosed = getByTestId ('toggle-closed');
+    const { container, toggler } = mock.toggler (Controls, 'close');
 
     /// act : toggle false -> true ///
-    const beforeOn = ToggleClosed.textContent;
-    act (() => {
-      fireEvent.click (ToggleClosed);
-    });
-    const afterOn = ToggleClosed.textContent;
+    const beforeOn = toggler.get ().textContent;
+    fireEvent.click (toggler.get ());
+    container.rerender (container.get ());
+    const afterOn = toggler.get ().textContent;
 
     /// act : toggle true -> false ///
-    const beforeOff = ToggleClosed.textContent;
-    act (() => {
-      fireEvent.click (ToggleClosed);
-    });
-    const afterOff = ToggleClosed.textContent;
+    const beforeOff = toggler.get ().textContent;
+    fireEvent.click (toggler.get ());
+    container.rerender (container.get ());
+    const afterOff = toggler.get ().textContent;
 
     /// assert ///
-    // console.log (beforeOn, afterOn);
     expect (afterOn).not.toBe (beforeOn);
-    // console.log (beforeOff, afterOff);
     expect (afterOff).not.toBe (beforeOff);
   });
 
   test (`the \`locked\` toggler's text changes to reflect action`, () => {
-    const { getByTestId } = render (<Controls locked={false} closed={true}/>);
-    const ToggleLocked = getByTestId ('toggle-locked');
+    const { container, toggler } = mock.toggler (Controls, 'lock');
 
     /// act : toggle false -> true ///
-    const beforeOn = ToggleLocked.textContent;
-    act (() => {
-      fireEvent.click (ToggleLocked);
-    });
-    const afterOn = ToggleLocked.textContent;
+    const beforeOn = toggler.get ().textContent;
+    fireEvent.click (toggler.get ());
+    container.rerender (container.get ());
+    const afterOn = toggler.get ().textContent;
 
     /// act : toggle true -> false ///
-    const beforeOff = ToggleLocked.textContent;
-    act (() => {
-      fireEvent.click (ToggleLocked);
-    });
-    const afterOff = ToggleLocked.textContent;
+    const beforeOff = toggler.get ().textContent;
+    fireEvent.click (toggler.get ());
+    container.rerender (container.get ());
+    const afterOff = toggler.get ().textContent;
 
     /// assert ///
-    // console.log (beforeOn, afterOn);
     expect (afterOn).not.toBe (beforeOn);
-    // console.log (beforeOff, afterOff);
     expect (afterOff).not.toBe (beforeOff);
   });
 
