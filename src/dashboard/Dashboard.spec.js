@@ -28,4 +28,13 @@ describe (`the Dashboard component`, () => {
     expect (Controls).toHaveClass ('controls panel');
   });
 
+  test (`defaults to not \`locked\` and not \`closed\``, () => {
+    const { getByTestId } = render (<Dashboard/>);
+    const IsClosed = getByTestId ('is-closed');
+    const IsLocked = getByTestId ('is-locked');
+
+    expect (IsClosed).toHaveTextContent ('Open');
+    expect (IsLocked).toHaveTextContent ('Unlocked');
+  });
+
 });
