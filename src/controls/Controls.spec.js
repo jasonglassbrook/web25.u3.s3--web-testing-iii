@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import Controls from './Controls';
@@ -26,9 +26,55 @@ describe (`the Controls component`, () => {
     expect (ToggleLocked).toBeInTheDocument ();
   });
 
-  test.todo (`the \`closed\` toggler text changes to reflect action`);
+  test (`the \`closed\` toggler's text changes to reflect action`, () => {
+    const { getByTestId } = render (<Controls closed={false} locked={false}/>);
+    const ToggleClosed = getByTestId ('toggle-closed');
 
-  test.todo (`the \`locked\` toggler text changes to reflect action`);
+    /// act : toggle false -> true ///
+    const beforeOn = ToggleClosed.textContent;
+    act (() => {
+      fireEvent.click (ToggleClosed);
+    });
+    const afterOn = ToggleClosed.textContent;
+
+    /// act : toggle true -> false ///
+    const beforeOff = ToggleClosed.textContent;
+    act (() => {
+      fireEvent.click (ToggleClosed);
+    });
+    const afterOff = ToggleClosed.textContent;
+
+    /// assert ///
+    // console.log (beforeOn, afterOn);
+    expect (afterOn).not.toBe (beforeOn);
+    // console.log (beforeOff, afterOff);
+    expect (afterOff).not.toBe (beforeOff);
+  });
+
+  test (`the \`locked\` toggler's text changes to reflect action`, () => {
+    const { getByTestId } = render (<Controls locked={false} closed={true}/>);
+    const ToggleLocked = getByTestId ('toggle-locked');
+
+    /// act : toggle false -> true ///
+    const beforeOn = ToggleLocked.textContent;
+    act (() => {
+      fireEvent.click (ToggleLocked);
+    });
+    const afterOn = ToggleLocked.textContent;
+
+    /// act : toggle true -> false ///
+    const beforeOff = ToggleLocked.textContent;
+    act (() => {
+      fireEvent.click (ToggleLocked);
+    });
+    const afterOff = ToggleLocked.textContent;
+
+    /// assert ///
+    // console.log (beforeOn, afterOn);
+    expect (afterOn).not.toBe (beforeOn);
+    // console.log (beforeOff, afterOff);
+    expect (afterOff).not.toBe (beforeOff);
+  });
 
   test (`the \`closed\` toggler is ENABLED when not \`locked\``, () => {
     const { getByTestId } = render (<Controls locked={false}/>);
