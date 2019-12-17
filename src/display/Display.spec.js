@@ -40,7 +40,7 @@ describe (`the Display component`, () => {
     expect (IsClosed).toHaveTextContent ('Open');
   });
 
-  test (`displays 'Locked' when \`locked\`, else 'Unlocked'`, () => {
+  test (`displays 'Locked' when \`locked\``, () => {
     const { getByTestId } = render (<Display locked={true}/>);
     const IsLocked = getByTestId ('is-locked');
 
