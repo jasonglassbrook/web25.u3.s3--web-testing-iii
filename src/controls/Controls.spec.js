@@ -6,15 +6,25 @@ import Controls from './Controls';
 
 describe (`the Controls component`, () => {
 
-  test (`renders without crashing`, () => {
+  test (`renders and unmounts without crashing`, () => {
     const { unmount } = render (<Controls/>);
 
     unmount ();
   });
 
-  test.todo (`has button to toggle \`closed\``);
+  test (`has button to toggle \`closed\``, () => {
+    const { getByTestId } = render (<Controls/>);
+    const ToggleClosed = getByTestId ('toggle-closed');
 
-  test.todo (`has button to toggle \`locked\``);
+    expect (ToggleClosed).toBeInTheDocument ();
+  });
+
+  test (`has button to toggle \`locked\``, () => {
+    const { getByTestId } = render (<Controls/>);
+    const ToggleLocked = getByTestId ('toggle-locked');
+
+    expect (ToggleLocked).toBeInTheDocument ();
+  });
 
   test.todo (`the \`closed\` toggler text changes to reflect action`);
 
