@@ -4,11 +4,21 @@ const Controls = props => {
   const { locked, closed, toggleLocked, toggleClosed } = props;
 
   return (
-    <div className="controls panel">
-      <button disabled={!closed} onClick={toggleLocked} className="toggle-btn">
+    <div
+    className='controls panel'
+    data-testid='controls-panel'>
+      <button
+      className='toggle-btn'
+      data-testid='toggle-locked'
+      disabled={!closed}
+      onClick={toggleLocked}>
         {locked ? 'Unlock Gate' : 'Lock Gate'}
       </button>
-      <button disabled={locked} onClick={toggleClosed} className="toggle-btn">
+      <button
+      className='toggle-btn'
+      data-testid='toggle-closed'
+      disabled={locked}
+      onClick={toggleClosed}>
         {closed ? 'Open Gate' : 'Close Gate'}
       </button>
     </div>
